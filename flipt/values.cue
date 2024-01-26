@@ -23,4 +23,5 @@ values: {
 	autoscaling: {
 		metrics: cpu: averageUtilization: 70
 	}
+	ingress: _
 }

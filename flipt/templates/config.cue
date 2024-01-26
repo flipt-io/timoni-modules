@@ -4,6 +4,7 @@ import (
 	"encoding/yaml"
 
 	corev1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 	timoniv1 "timoni.sh/core/v1alpha1"
 	fliptv1 "timoni.sh/flipt/schema/flipt"
 )
@@ -133,6 +134,24 @@ import (
 		}
 	}
 
+	ingress?: {
+		#path: {
+			path: string
+			type: *networkingv1.#PathTypeImplementationSpecific | networkingv1.#PathType
+		}
+		#rule: {
+			host: string
+			paths: [...#path]
+		}
+
+		className?: string | null
+		tls?: [...networkingv1.#IngressTLS]
+		rules: [{
+			host: "flipt.local"
+			paths: [#path & {path: "/"}]
+		}, ...#rule]
+	}
+
 	ssh: knownHosts?: string
 }
 
@@ -164,6 +183,10 @@ import (
 
 		if config.autoscaling != _|_ {
 			hpa: #HorizontalPodAutoscaler & {#config: config}
+		}
+
+		if config.ingress != _|_ {
+			ingress: #Ingress & {#config: config}
 		}
 	}
 
