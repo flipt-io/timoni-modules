@@ -24,4 +24,5 @@ values: {
 		metrics: cpu: averageUtilization: 70
 	}
 	ingress: _
+	pdb:     _
 }

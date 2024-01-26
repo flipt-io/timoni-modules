@@ -152,6 +152,8 @@ import (
 		}, ...#rule]
 	}
 
+	pdb?: maxUnavailable: *"25%" | string
+
 	ssh: knownHosts?: string
 }
 
@@ -187,6 +189,10 @@ import (
 
 		if config.ingress != _|_ {
 			ingress: #Ingress & {#config: config}
+		}
+
+		if config.pdb != _|_ {
+			pdb: #PodDisruptionBudget & {#config: config}
 		}
 	}
 
