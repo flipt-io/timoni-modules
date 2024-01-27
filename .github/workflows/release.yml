@@ -1,0 +1,26 @@
+name: Release module
+on:
+  push:
+    tag: ['*'] # semver format
+
+permissions:
+  contents: read # needed for checkout
+  packages: write # needed for GHCR access
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Timoni
+        uses: stefanprodan/timoni/actions/setup@main
+      - name: Vet module
+        run: |
+          timoni mod vet ./flipt
+      - name: Push module
+        run: |
+          timoni mod push ./flipt \
+            oci://ghcr.io/${{ github.repository_owner }}/timoni-flipt \
+            --version ${{ github.ref_name }} \
+            --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
