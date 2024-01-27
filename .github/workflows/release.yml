@@ -21,7 +21,7 @@ jobs:
       - name: Push module
         run: |
           VERSION=$(echo "${{ github.ref_name }}" | sed "s#flipt/##")
-          echo timoni mod push ./flipt \
+          timoni mod push ./flipt \
             oci://ghcr.io/${{ github.repository_owner }}/timoni-flipt \
             --version $VERSION \
             --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
