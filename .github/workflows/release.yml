@@ -20,7 +20,7 @@ jobs:
           timoni mod vet ./flipt
       - name: Push module
         run: |
-          VERSION=$(echo "${{ github.ref_name }}" | sed "s#flipt/##")
+          VERSION=$(echo "${{ github.ref_name }}" | sed '/flipt\/[v]\?/!{q100}; {s#flipt/[v]\?##}' || (echo "unexpected tag version" && exit 1))
           timoni mod push ./flipt \
             oci://ghcr.io/${{ github.repository_owner }}/timoni-flipt \
             --version $VERSION \
