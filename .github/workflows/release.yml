@@ -1,7 +1,7 @@
 name: Release module
 on:
   push:
-    tag: ['*'] # semver format
+    tag: ['flipt/*'] # semver format
 
 permissions:
   contents: read # needed for checkout
@@ -20,7 +20,8 @@ jobs:
           timoni mod vet ./flipt
       - name: Push module
         run: |
-          timoni mod push ./flipt \
+          VERSION=$(echo "${{ github.ref_name }}" | sed "s#flipt/##")
+          echo timoni mod push ./flipt \
             oci://ghcr.io/${{ github.repository_owner }}/timoni-flipt \
-            --version ${{ github.ref_name }} \
+            --version $VERSION \
             --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
