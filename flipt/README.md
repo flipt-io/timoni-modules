@@ -41,6 +41,24 @@ timoni -n default delete flipt
 
 ## Configuration
 
+### Flipt Configuration
+
+Flipt itself is configured via a [YAML configration file](https://www.flipt.io/docs/configuration/overview) (with support for environment variable overrides).
+This file is rendered directly from the field `values.flipt` in this Timoni module.
+Checkout the [CUE schema](./schema/flipt/flipt.cue) in this repository for Flipts full set of configurations.
+
+#### Example
+
+```cue
+values: {
+    flipt: {
+        log: level: "DEBUG"
+        authentication: required: true
+        authentication: methods: token: enabled: true
+    }
+}
+```
+
 ### General values
 
 | Key                          | Type                                    | Default                    | Description                                                                                                                                  |
