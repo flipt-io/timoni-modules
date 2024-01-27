@@ -25,4 +25,5 @@ values: {
 	persistence: _
 	ingress:     _
 	pdb:         _
+	migration:   _
 }

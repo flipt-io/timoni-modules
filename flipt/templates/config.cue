@@ -153,6 +153,8 @@ import (
 	pdb?: maxUnavailable: *"25%" | string
 
 	ssh: knownHosts?: string
+
+	migration?: deadline: *600 | int // seconds
 }
 
 // Instance takes the config values and outputs the Kubernetes objects.
@@ -195,6 +197,10 @@ import (
 
 		if config.persistence != _|_ && config.persistence.existingClaim == _|_ {
 			pvc: #PersistentVolumeClaim & {#config: config}
+		}
+
+		if config.migration != _|_ {
+			migration: #MigrationJob & {#config: config}
 		}
 	}
 
