@@ -13,7 +13,7 @@ import (
 	kind:       "Deployment"
 	metadata:   #config.metadata
 	spec: appsv1.#DeploymentSpec & {
-		if !#config.autoscaling.enabled {
+		if #config.autoscaling == _|_ {
 			replicas: #config.replicas
 		}
 		selector: matchLabels: #config.selector.labels
@@ -111,10 +111,10 @@ import (
 					},
 					{
 						name: "flipt-data"
-						if #config.persistence.enabled {
+						if #config.persistence != _|_ {
 							persistentVolumeClaim: claimName: #config.persistence.existingClaim | *#config.metadata.name
 						}
-						if !#config.persistence.enabled {
+						if #config.persistence == _|_ {
 							emptyDir: {}
 						}
 					},

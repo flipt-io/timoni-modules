@@ -17,12 +17,12 @@ values: {
 		digest:     ""
 		tag:        "latest"
 	}
-	persistence: enabled: true
-	ssh: knownHosts:      "some-know-host"
-	env: KEY:             "VALUE"
+	ssh: knownHosts: "some-know-host"
+	env: KEY:        "VALUE"
 	autoscaling: {
 		metrics: cpu: averageUtilization: 70
 	}
-	ingress: _
-	pdb:     _
+	persistence: _
+	ingress:     _
+	pdb:         _
 }

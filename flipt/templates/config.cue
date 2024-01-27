@@ -58,10 +58,6 @@ import (
 	// By default, the number of replicas is 1.
 	replicas: *1 | int & >0
 
-	autoscaling: {
-		enabled: *false | bool
-	}
-
 	// The securityContext allows setting the container security context.
 	// By default, the container is denined privilege escalation.
 	securityContext: corev1.#SecurityContext & {
@@ -113,10 +109,12 @@ import (
 		}
 	}
 
-	persistence: {
-		enabled:        *false | bool
+	persistence?: {
 		subPath?:       string
+		storageClass?:  string
 		existingClaim?: string
+		accessModes: *[corev1.#ReadWriteOnce] | [...corev1.#PersistentVolumeAccessMode]
+		size: *"5Gi" | string
 	}
 
 	env: [string]: string
@@ -146,10 +144,10 @@ import (
 
 		className?: string | null
 		tls?: [...networkingv1.#IngressTLS]
-		rules: [{
+		rules: *[{
 			host: "flipt.local"
 			paths: [#path & {path: "/"}]
-		}, ...#rule]
+		}] | [...#rule]
 	}
 
 	pdb?: maxUnavailable: *"25%" | string
@@ -193,6 +191,10 @@ import (
 
 		if config.pdb != _|_ {
 			pdb: #PodDisruptionBudget & {#config: config}
+		}
+
+		if config.persistence != _|_ && config.persistence.existingClaim == _|_ {
+			pvc: #PersistentVolumeClaim & {#config: config}
 		}
 	}
 
