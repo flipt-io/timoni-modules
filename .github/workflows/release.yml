@@ -22,7 +22,7 @@ jobs:
           echo "module=$MODULE" >> "$GITHUB_OUTPUT"
       - id: version
         run: |
-          VERSION=$(echo "${{ github.ref_name }}" | sed '[a-zA-Z]\+\/[v]\?[0-9.]\+/!{q100}; {s#/[a-zA-Z]\+\/[v]\?##}' || (echo "unexpected tag version" && exit 1))
+          VERSION=$(echo "${{ github.ref_name }}" | sed '/[a-zA-Z]\+\/[v]\?[0-9.]\+/!{q100}; {s#[a-zA-Z]\+\/[v]\?##}' || (echo "unexpected tag version" && exit 1))
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
   release:
