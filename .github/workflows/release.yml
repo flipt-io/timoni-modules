@@ -1,14 +1,33 @@
 name: Release module
 on:
   push:
-    tags: ['flipt/*'] # semver format
+    tags: ['*/*'] # semver format
 
 permissions:
   contents: read # needed for checkout
   packages: write # needed for GHCR access
 
 jobs:
-  push:
+  parseTag:
+    runs-on: ubuntu-latest
+    outputs:
+      module: ${{ steps.module.outputs.module }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - id: module
+        run: |
+          MODULE=$(echo "${{ github.ref_name }}" | sed '/[a-zA-Z]\+\/[v]\?[0-9.]\+/!{q100}; {s#/[v]\?[0-9.]\+##}' || (echo "unexpected tag version" && exit 1))
+          echo "module=$MODULE" >> "$GITHUB_OUTPUT"
+      - id: version
+        run: |
+          VERSION=$(echo "${{ github.ref_name }}" | sed '[a-zA-Z]\+\/[v]\?[0-9.]\+/!{q100}; {s#/[a-zA-Z]\+\/[v]\?##}' || (echo "unexpected tag version" && exit 1))
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  release:
+    if: '${{ contains(fromJson(["flipt", "traefik"]), needs.parseTag.outputs.module) }'
+    needs: parseTag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,11 +36,10 @@ jobs:
         uses: stefanprodan/timoni/actions/setup@main
       - name: Vet module
         run: |
-          timoni mod vet ./flipt
+          timoni mod vet "./${{ needs.parseTag.module }}"
       - name: Push module
         run: |
-          VERSION=$(echo "${{ github.ref_name }}" | sed '/flipt\/[v]\?/!{q100}; {s#flipt/[v]\?##}' || (echo "unexpected tag version" && exit 1))
-          timoni mod push ./flipt \
+          timoni mod push "./${{ needs.parseTag.module }}" \
             oci://ghcr.io/${{ github.repository_owner }}/timoni-flipt \
-            --version $VERSION \
+            --version "${{ needs.parseTag.version }}" \
             --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
