@@ -26,7 +26,7 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
   release:
-    if: '${{ contains(fromJson(["flipt", "traefik"]), needs.parseTag.outputs.module) }'
+    if: '${{ contains(fromJson(["flipt", "traefik"]), needs.parseTag.outputs.module) }}'
     needs: parseTag
     runs-on: ubuntu-latest
     steps:
@@ -36,10 +36,10 @@ jobs:
         uses: stefanprodan/timoni/actions/setup@main
       - name: Vet module
         run: |
-          timoni mod vet "./${{ needs.parseTag.module }}"
+          timoni mod vet ./${{ needs.parseTag.module }}
       - name: Push module
         run: |
-          timoni mod push "./${{ needs.parseTag.module }}" \
-            "oci://ghcr.io/${{ github.repository_owner }}/timoni-${{ needs.parseTag.module }}" \
-            --version "${{ needs.parseTag.version }}" \
+          timoni mod push ./${{ needs.parseTag.module }} \
+            oci://ghcr.io/${{ github.repository_owner }}/timoni-${{ needs.parseTag.module }} \
+            --version ${{ needs.parseTag.version }} \
             --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
