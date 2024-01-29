@@ -7,7 +7,7 @@ A [timoni.sh](http://timoni.sh) module for deploying flipt to Kubernetes cluster
 To create an instance using the default values:
 
 ```shell
-timoni -n default apply flipt oci://<container-registry-url>
+timoni -n default apply flipt oci://ghcr.io/flipt-io/timoni-flipt
 ```
 
 To change the [default configuration](#configuration),
@@ -27,7 +27,7 @@ values: {
 And apply the values with:
 
 ```shell
-timoni -n default apply flipt oci://<container-registry-url> \
+timoni -n default apply flipt oci://ghcr.io/flipt-io/timoni-flipt \
 --values ./my-values.cue
 ```
 

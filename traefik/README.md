@@ -7,7 +7,7 @@ A [timoni.sh](http://timoni.sh) module for deploying traefik to Kubernetes clust
 To create an instance using the default values:
 
 ```shell
-timoni -n default apply traefik oci://<container-registry-url>
+timoni -n default apply traefik oci://ghcr.io/flipt-io/timoni-traefik
 ```
 
 To change the [default configuration](#configuration),
@@ -27,7 +27,7 @@ values: {
 And apply the values with:
 
 ```shell
-timoni -n default apply traefik oci://<container-registry-url> \
+timoni -n default apply traefik oci://ghcr.io/flipt-io/timoni-traefik \
 --values ./my-values.cue
 ```
 
