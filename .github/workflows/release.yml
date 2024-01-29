@@ -1,7 +1,7 @@
 name: Release module
 on:
   push:
-    tag: ['flipt/*'] # semver format
+    tags: ['flipt/*'] # semver format
 
 permissions:
   contents: read # needed for checkout
