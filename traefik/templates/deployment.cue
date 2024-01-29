@@ -38,13 +38,13 @@ import (
 						livenessProbe: {
 							httpGet: {
 								path: "/ping"
-								port: "http_admin"
+								port: "http-admin"
 							}
 						}
 						readinessProbe: {
 							httpGet: {
 								path: "/ping"
-								port: "http_admin"
+								port: "http-admin"
 							}
 						}
 						resources:       #config.resources

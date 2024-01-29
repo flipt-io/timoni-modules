@@ -72,9 +72,9 @@ import (
 		annotations?: timoniv1.#Annotations
 
 		ports: {
-			http:       *8000 | int & >0 & <=65535
-			https:      *4443 | int & >0 & <=65535
-			http_admin: *8080 | int & >0 & <=65535
+			http:         *8000 | int & >0 & <=65535
+			https:        *4443 | int & >0 & <=65535
+			"http-admin": *8080 | int & >0 & <=65535
 		}
 	}
 
