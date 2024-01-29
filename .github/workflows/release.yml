@@ -40,6 +40,6 @@ jobs:
       - name: Push module
         run: |
           timoni mod push "./${{ needs.parseTag.module }}" \
-            oci://ghcr.io/${{ github.repository_owner }}/timoni-flipt \
+            "oci://ghcr.io/${{ github.repository_owner }}/timoni-${{ needs.parseTag.module }}" \
             --version "${{ needs.parseTag.version }}" \
             --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
