@@ -93,7 +93,7 @@ import (
 	}
 
 	args: *[
-		"--args",
+		"--ping",
 		"--api.insecure",
 		"--accesslog",
 		"--entrypoints.web.Address=:\(service.ports.http)",
