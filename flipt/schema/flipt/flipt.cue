@@ -7,7 +7,6 @@ import "strings"
 	//
 	// Flipt config file is a YAML file defining how to configure the
 	// Flipt application.
-	@jsonschema(schema="http://json-schema.org/draft/2019-09/schema#")
 	version?:        "1.0" | *"1.0"
 	experimental?:   #experimental
 	audit?:          #audit
@@ -218,13 +217,13 @@ import "strings"
 		conn_max_lifetime?:           =~#duration | int
 		prepared_statements_enabled?: bool | *true
 	} & ({
-		url?: string | *"file:/var/opt/flipt/flipt.db"
+		url: string | *"file:/var/opt/flipt/flipt.db"
 	} | {
-		protocol?: *"sqlite" | "cockroach" | "cockroachdb" | "file" | "mysql" | "postgres"
-		host?:     string
-		port?:     int
-		name?:     string
-		user?:     string
+		protocol: *"sqlite" | "cockroach" | "cockroachdb" | "file" | "mysql" | "postgres"
+		host:     string
+		port:     int
+		name:     string
+		user:     string
 	})
 
 	_#lower: ["debug", "error", "fatal", "info", "panic", "trace", "warn"]

@@ -101,13 +101,26 @@ import (
 		image!:  timoniv1.#Image
 	}
 
-	flipt: fliptv1.#FliptSpec & {
-		server: {
-			#port:     int & >0 & <=65535
-			http_port: *8080 | #port
-			grpc_port: *9000 | #port
+	flipt: (*({
+		log: {
+			level:      "INFO"
+			encoding:   "console"
+			grpc_level: "ERROR"
 		}
-	}
+		server: {
+			protocol:   "http"
+			host:       "0.0.0.0"
+			https_port: 443
+			http_port:  8080
+			grpc_port:  9000
+		}
+		db: {
+			url:               "file:/var/opt/flipt/flipt.db"
+			max_idle_conn:     2
+			max_open_conn:     0
+			conn_max_lifetime: 0
+		}
+	} & fliptv1.#FliptSpec) | fliptv1.#FliptSpec)
 
 	persistence?: {
 		subPath?:       string
@@ -121,10 +134,10 @@ import (
 
 	autoscaling?: {
 		minReplicas: *1 | uint
-		maxReplicas: *10 | >=minReplicas
+		maxReplicas: *10 | uint & >=minReplicas
 		metrics: {
 			cpu?: {
-				averageUtilization: int32
+				averageUtilization: *80 | int32 & >0 & <=100
 			}
 			memory?: {
 				averageUtilization: int32

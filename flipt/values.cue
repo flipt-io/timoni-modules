@@ -17,13 +17,4 @@ values: {
 		digest:     ""
 		tag:        "latest"
 	}
-	ssh: knownHosts: "some-know-host"
-	env: KEY:        "VALUE"
-	autoscaling: {
-		metrics: cpu: averageUtilization: 70
-	}
-	persistence: _
-	ingress:     _
-	pdb:         _
-	migration:   _
 }
