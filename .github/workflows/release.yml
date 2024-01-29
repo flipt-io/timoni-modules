@@ -36,10 +36,10 @@ jobs:
         uses: stefanprodan/timoni/actions/setup@main
       - name: Vet module
         run: |
-          timoni mod vet ./${{ needs.parseTag.module }}
+          timoni mod vet ./${{ needs.parseTag.outputs.module }}
       - name: Push module
         run: |
-          timoni mod push ./${{ needs.parseTag.module }} \
-            oci://ghcr.io/${{ github.repository_owner }}/timoni-${{ needs.parseTag.module }} \
-            --version ${{ needs.parseTag.version }} \
+          timoni mod push ./${{ needs.parseTag.outputs.module }} \
+            oci://ghcr.io/${{ github.repository_owner }}/timoni-${{ needs.parseTag.outputs.module }} \
+            --version ${{ needs.parseTag.outputs.version }} \
             --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
