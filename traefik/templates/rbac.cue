@@ -1,10 +1,11 @@
 package templates
 
 #RBAC: {
+	#config: #Config
 	"traefik-ingress-controller-clusterrole": {
 		apiVersion: "rbac.authorization.k8s.io/v1"
 		kind:       "ClusterRole"
-		metadata: name: "traefik-ingress-controller"
+		metadata:   #config.metadata
 
 		rules: [{
 			apiGroups: [""]
@@ -65,17 +66,17 @@ package templates
 	"traefik-ingress-controller-clusterrolebinding": {
 		apiVersion: "rbac.authorization.k8s.io/v1"
 		kind:       "ClusterRoleBinding"
-		metadata: name: "traefik-ingress-controller"
+		metadata:   #config.metadata
 
 		roleRef: {
 			apiGroup: "rbac.authorization.k8s.io"
 			kind:     "ClusterRole"
-			name:     "traefik-ingress-controller"
+			name:     #config.metadata
 		}
 		subjects: [{
 			kind:      "ServiceAccount"
-			name:      "traefik-ingress-controller"
-			namespace: "default"
+			name:      #config.metadata.name
+			namespace: #config.metadata.namespace
 		}]
 	}
 }
