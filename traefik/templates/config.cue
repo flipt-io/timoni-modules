@@ -113,6 +113,7 @@ import (
 		deploy: #Deployment & {#config: config}
 
 		for k, v in #CRDs {"\(k)": v}
+		for k, v in #RBAC {"\(k)": v}
 	}
 
 	tests: {
