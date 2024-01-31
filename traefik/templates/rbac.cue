@@ -9,7 +9,7 @@ import (
 	"traefik-ingress-controller-clusterrole": rbacv1.#ClusterRole & {
 		apiVersion: "rbac.authorization.k8s.io/v1"
 		kind:       "ClusterRole"
-		metadata:   #config.metadata
+		metadata: name: #config.metadata.name
 
 		rules: [{
 			apiGroups: [""]
@@ -70,7 +70,7 @@ import (
 	"traefik-ingress-controller-clusterrolebinding": rbacv1.#ClusterRoleBinding & {
 		apiVersion: "rbac.authorization.k8s.io/v1"
 		kind:       "ClusterRoleBinding"
-		metadata:   #config.metadata
+		metadata: name: #config.metadata.name
 
 		roleRef: {
 			apiGroup: "rbac.authorization.k8s.io"
