@@ -32,7 +32,7 @@ import (
 						"-v",
 						"-m",
 						"5",
-						"\(#config.metadata.name):\(#config.service.ports.http)",
+						"\(#config.metadata.name):\(#config.service.ports.http.port)",
 					]
 				}]
 				restartPolicy: "Never"

@@ -13,14 +13,17 @@ import (
 		metadata: annotations: #config.service.annotations
 	}
 	spec: corev1.#ServiceSpec & {
-		type:     corev1.#ServiceTypeClusterIP
+		type:     #config.service.type
 		selector: #config.selector.labels
 		ports: [
-			for portName, num in #config.service.ports {
-				port:       num
+			for portName, p in #config.service.ports {
+				port:       p.port
 				protocol:   "TCP"
 				name:       portName
 				targetPort: portName
+				if p.nodePort != _|_ {
+					nodePort: p.nodePort
+				}
 			},
 		]
 	}

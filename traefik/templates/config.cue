@@ -71,10 +71,17 @@ import (
 	service: {
 		annotations?: timoniv1.#Annotations
 
+		type: *corev1.#ServiceTypeClusterIP | corev1.#ServiceType
+
+		#port: {
+			port:      int & >0 & <=65535
+			nodePort?: int & >=30000 & <=32767
+		}
+
 		ports: {
-			http:         *8000 | int & >0 & <=65535
-			https:        *4443 | int & >0 & <=65535
-			"http-admin": *8080 | int & >0 & <=65535
+			http: *{port: 8000} | #port
+			https: *{port: 4443} | #port
+			"http-admin": *{port: 8080} | #port
 		}
 	}
 

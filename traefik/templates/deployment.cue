@@ -29,9 +29,9 @@ import (
 						imagePullPolicy: #config.image.pullPolicy
 						args:            #config.args
 						ports: [
-							for port, num in #config.service.ports {
-								name:          port
-								containerPort: num
+							for portName, port in #config.service.ports {
+								name:          portName
+								containerPort: port.port
 								protocol:      "TCP"
 							},
 						]
