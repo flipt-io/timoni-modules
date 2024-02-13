@@ -7,3 +7,4 @@ This repository contains a set of [Timoni](https://timoni.sh) module definitions
 
 - [Flipt](./flipt)
 - [Traefik](./traefik)
+- [Infisical Secrets Operator](./infisical-secrets-operator)
