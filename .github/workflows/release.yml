@@ -26,7 +26,7 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
   release:
-    if: "${{ contains(fromJson('[\"flipt\", \"traefik\", \"infisical\"]'), needs.parseTag.outputs.module) }}"
+    if: "${{ contains(fromJson('[\"flipt\", \"traefik\", \"infisical-secrets-operator\"]'), needs.parseTag.outputs.module) }}"
     needs: parseTag
     runs-on: ubuntu-latest
     steps:
