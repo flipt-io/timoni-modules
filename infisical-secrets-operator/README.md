@@ -1,13 +1,13 @@
-# infisical
+# Infisical Secrets Operator
 
-A [timoni.sh](http://timoni.sh) module for deploying infisical to Kubernetes clusters.
+A [timoni.sh](http://timoni.sh) module for deploying the Infisical Secrets Operator to Kubernetes clusters.
 
 ## Install
 
 To create an instance using the default values:
 
 ```shell
-timoni -n default apply infisical oci://<container-registry-url>
+timoni -n default apply infisical-secrets-operator oci://<container-registry-url>
 ```
 
 To change the [default configuration](#configuration),
@@ -27,7 +27,7 @@ values: {
 And apply the values with:
 
 ```shell
-timoni -n default apply infisical oci://<container-registry-url> \
+timoni -n default apply infisical-secrets-operator oci://<container-registry-url> \
 --values ./my-values.cue
 ```
 
@@ -45,10 +45,10 @@ timoni -n default delete infisical
 
 | Key                          | Type                                    | Default                    | Description                                                                                                                                  |
 |------------------------------|-----------------------------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `image: tag:`                | `string`                                | `<latest version>`         | Container image tag                                                                                                                          |
-| `image: digest:`             | `string`                                | `<latest digest>`          | Container image digest, takes precedence over `tag` when specified                                                                           |
-| `image: repository:`         | `string`                                | `cgr.dev/chainguard/nginx` | Container image repository                                                                                                                   |
-| `image: pullPolicy:`         | `string`                                | `IfNotPresent`             | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)                                     |
+| `image: manager: tag:`                | `string`                                | `<latest version>`         | Container image tag                                                                                                                          |
+| `image: manager: digest:`             | `string`                                | `<latest digest>`          | Container image digest, takes precedence over `tag` when specified                                                                           |
+| `image: manager: repository:`         | `string`                                | `infisical/kubernetes-operator` | Container image repository                                                                                                                   |
+| `image: manager: pullPolicy:`         | `string`                                | `IfNotPresent`             | [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)                                     |
 | `metadata: labels:`          | `{[ string]: string}`                   | `{}`                       | Common labels for all resources                                                                                                              |
 | `metadata: annotations:`     | `{[ string]: string}`                   | `{}`                       | Common annotations for all resources                                                                                                         |
 | `podAnnotations:`            | `{[ string]: string}`                   | `{}`                       | Annotations applied to pods                                                                                                                  |
