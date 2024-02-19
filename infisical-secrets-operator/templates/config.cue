@@ -81,6 +81,13 @@ import (
 	affinity?: corev1.#Affinity
 	topologySpreadConstraints?: [...corev1.#TopologySpreadConstraint]
 
+	infisical: {
+		serviceToken?: {
+			name:  *"infisicalservicetoken" | string
+			token: string
+		}
+	}
+
 	initSecrets?: [Name=string]: {
 		metadata: name: Name
 		...
@@ -107,6 +114,10 @@ import (
 		}
 		for k, v in (#RBAC & {#config: config}) {
 			"\(k)": v
+		}
+
+		if config.infisical.serviceToken != _|_ {
+			infisicalservicetoken: #Secret & {#config: config}
 		}
 
 		if config.initSecrets != _|_ {
