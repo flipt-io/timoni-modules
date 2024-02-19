@@ -81,6 +81,11 @@ import (
 	affinity?: corev1.#Affinity
 	topologySpreadConstraints?: [...corev1.#TopologySpreadConstraint]
 
+	initSecrets?: [Name=string]: {
+		metadata: name: Name
+		...
+	}
+
 	// Test Job disabled by default.
 	test: {
 		enabled: *false | bool
@@ -102,6 +107,12 @@ import (
 		}
 		for k, v in (#RBAC & {#config: config}) {
 			"\(k)": v
+		}
+
+		if config.initSecrets != _|_ {
+			for k, v in (config.initSecrets) {
+				"\(k)": v & #InfisicalSecret & {#config: config}
+			}
 		}
 	}
 
