@@ -13,7 +13,7 @@ import (
 		name:      #config.infisical.serviceToken.name
 		namespace: #config.metadata.namespace
 	}
-	stringData: serviceToken: #config.infisical.serviceToken.token
+	stringData: infisicalToken: #config.infisical.serviceToken.token
 }
 
 #InfisicalSecret: infisicalsecretv1alpha1.#InfisicalSecret & {
