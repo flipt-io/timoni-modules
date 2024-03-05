@@ -21,7 +21,7 @@ import (
 			kind: "Issuer"
 			name: "\(#config.metadata.name)-selfsigned-issuer"
 		}
-		secretName: "\(#config.metadata.name)-controller-manager-server-cert"
+		secretName: "\(#config.metadata.name)-controller-manager-service-cert"
 		subject: organizationalUnits: [
 			#config.metadata.name,
 		]
