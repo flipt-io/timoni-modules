@@ -17,7 +17,7 @@ import (
 	apiVersion: "admissionregistration.k8s.io/v1"
 	kind:       "MutatingWebhookConfiguration"
 	metadata: {
-		annotations: "cert-manager.io/inject-ca-from": "\(#config.metadata.namespace)/\(#config.metadata.name)-serving-cert"
+		annotations: "cert-manager.io/inject-ca-from": "\(#config.metadata.namespace)/\(#config.metadata.name)-service-cert"
 		labels: "app.kubernetes.io/name":              #config.metadata.name
 		name: "\(#config.metadata.name)-mutating-webhook-configuration"
 	}
@@ -103,7 +103,7 @@ import (
 	apiVersion: "admissionregistration.k8s.io/v1"
 	kind:       "ValidatingWebhookConfiguration"
 	metadata: {
-		annotations: "cert-manager.io/inject-ca-from": "\(#config.metadata.namespace)/\(#config.metadata.name)-serving-cert"
+		annotations: "cert-manager.io/inject-ca-from": "\(#config.metadata.namespace)/\(#config.metadata.name)-service-cert"
 		labels: "app.kubernetes.io/name":              #config.metadata.name
 		name: "\(#config.metadata.name)-validating-webhook-configuration"
 	}

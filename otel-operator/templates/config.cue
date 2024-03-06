@@ -129,5 +129,21 @@ import (
 		for k, v in #CustomResourceDefinition {
 			"\(k)": v & {#config: config}
 		}
+
+		for k, v in (#Role & {#config: config}) {
+			"\(k)": v
+		}
+
+		for k, v in (#ClusterRole & {#config: config}) {
+			"\(k)": v
+		}
+
+		for k, v in (#RoleBinding & {#config: config}) {
+			"\(k)": v
+		}
+
+		for k, v in (#ClusterRoleBinding & {#config: config}) {
+			"\(k)": v
+		}
 	}
 }
