@@ -10,7 +10,7 @@ values: {
 	manager: image: {
 		repository: "infisical/kubernetes-operator"
 		digest:     "sha256:53e1381c89a27670ce99d449ae4e26cb504e103d27a7d633d55d539b8416c1ae"
-		tag:        "v0.3.0"
+		tag:        "v0.5.0"
 	}
 	kubeRBACProxy: image: {
 		repository: "gcr.io/kubebuilder/kube-rbac-proxy"
