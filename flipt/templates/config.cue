@@ -207,7 +207,10 @@ import (
 		}
 
 		if config.migration != _|_ {
-			migration: #MigrationJob & {#config: config}
+			migration: #MigrationJob & {
+				#config: config
+				#cmName: objects.cm.metadata.name
+			}
 		}
 	}
 
