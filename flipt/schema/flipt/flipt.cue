@@ -7,11 +7,15 @@ import "strings"
 	//
 	// Flipt config file is a YAML file defining how to configure the
 	// Flipt application.
+	@jsonschema(schema="http://json-schema.org/draft/2019-09/schema#")
 	version?:        "1.0" | *"1.0"
 	experimental?:   #experimental
+	analytics:       #analytics
 	audit?:          #audit
 	authentication?: #authentication
+	authorization?:  #authorization
 	cache?:          #cache
+	cloud?:          #cloud
 	cors?:           #cors
 	diagnostics?:    #diagnostics
 	storage?:        #storage
@@ -19,6 +23,7 @@ import "strings"
 	log?:            #log
 	meta?:           #meta
 	server?:         #server
+	metrics?:        #metrics
 	tracing?:        #tracing
 	ui?:             #ui
 
@@ -46,7 +51,12 @@ import "strings"
 				bootstrap?: {
 					token?:     string
 					expiration: =~#duration | int
+					metadata?: [string]: string
 				}
+			}
+
+			cloud?: {
+				enabled?: bool | *false
 			}
 
 			oidc?: {
@@ -68,17 +78,21 @@ import "strings"
 
 			github?: {
 				enabled?:          bool | *false
+				server_url?:       string
+				api_url?:          string
 				client_secret?:    string
 				client_id?:        string
 				redirect_address?: string
 				scopes?: [...string]
 				allowed_organizations?: [...] | string
+				allowed_teams?: [string]: [...string]
 			}
 
 			jwt?: {
 				enabled?: bool | *false
 				validate_claims?: {
-					issuer?: string
+					issuer?:  string
+					subject?: string
 					audiences?: [...string]
 				}
 				jwks_url?:        string
@@ -103,6 +117,22 @@ import "strings"
 		}
 	}
 
+	#authorization: {
+		#authorizationSource: {
+			backend: "local"
+			local: path: string
+			poll_interval?: =~#duration
+		}
+
+		required?: bool | *false
+		policy?: #authorizationSource & {
+			poll_interval: =~#duration | *"5m"
+		}
+		data?: #authorizationSource & {
+			poll_interval: =~#duration | *"30s"
+		}
+	}
+
 	#cache: {
 		enabled?: bool | *false
 		backend?: *"memory" | "redis"
@@ -113,17 +143,30 @@ import "strings"
 			port?:               int | *6379
 			require_tls?:        bool | *false
 			db?:                 int | *0
+			username?:           string
 			password?:           string
 			pool_size?:          int | *0
 			min_idle_conn?:      int | *0
 			conn_max_idle_time?: =~#duration | int | *0
 			net_timeout?:        =~#duration | int | *0
+			ca_cert_path?:       string
+			ca_cert_bytes?:      string
+			insecure_skip_tls?:  bool | *false
 		}
 
 		memory?: {
 			enabled?:           bool | *false
 			eviction_interval?: =~#duration | int | *"5m"
 			expiration?:        =~#duration | int | *"60s"
+		}
+	}
+
+	#cloud: {
+		host?:         string | *"flipt.cloud"
+		organization?: string
+		gateway?:      string
+		authentication?: {
+			api_key?: string
 		}
 	}
 
@@ -153,7 +196,10 @@ import "strings"
 		local?: path: string | *"."
 		git?: {
 			repository:         string
+			backend?:           *"memory" | "local"
 			ref?:               string | *"main"
+			ref_type?:          *"static" | "semver"
+			directory?:         string
 			poll_interval?:     =~#duration | *"30s"
 			ca_cert_path?:      string
 			ca_cert_bytes?:     string
@@ -203,10 +249,12 @@ import "strings"
 			repository:         string
 			bundles_directory?: string
 			authentication?: {
+				type:     "aws-ecr" | *"static"
 				username: string
 				password: string
 			}
-			poll_interval?: =~#duration | *"30s"
+			poll_interval?:    =~#duration | *"30s"
+			manifest_version?: "1.0" | *"1.1"
 		}
 	}
 
@@ -217,16 +265,16 @@ import "strings"
 		conn_max_lifetime?:           =~#duration | int
 		prepared_statements_enabled?: bool | *true
 	} & ({
-		url: string | *"file:/var/opt/flipt/flipt.db"
+		url?: string | *"file:/var/opt/flipt/flipt.db"
 	} | {
-		protocol: *"sqlite" | "cockroach" | "cockroachdb" | "file" | "mysql" | "postgres"
-		host:     string
-		port:     int
-		name:     string
-		user:     string
+		protocol?: *"sqlite" | "cockroach" | "cockroachdb" | "file" | "mysql" | "postgres"
+		host?:     string
+		port?:     int
+		name?:     string
+		user?:     string
 	})
 
-	_#lower: ["debug", "error", "fatal", "info", "panic", "trace", "warn"]
+	_#lower: ["debug", "error", "fatal", "info", "panic", "warn"]
 	_#all: _#lower + [for x in _#lower {strings.ToUpper(x)}]
 	#log: {
 		file?:       string
@@ -259,11 +307,29 @@ import "strings"
 		grpc_conn_max_idle_time?: =~#duration
 		grpc_conn_max_age?:       =~#duration
 		grpc_conn_max_age_grace?: =~#duration
+		cloud?: {
+			enabled?: bool | *false
+			port?:    int | *8443
+		}
+	}
+
+	#metrics: {
+		enabled?:  bool | *true
+		exporter?: *"prometheus" | "otlp"
+
+		otlp?: {
+			endpoint?: string | *"localhost:4317"
+			headers?: [string]: string
+		}
 	}
 
 	#tracing: {
-		enabled?:  bool | *false
-		exporter?: *"jaeger" | "zipkin" | "otlp"
+		enabled?:        bool | *false
+		exporter?:       *"jaeger" | "zipkin" | "otlp"
+		sampling_ratio?: float & >=0 & <=1 | *1
+		propagators?: [
+			..."tracecontext" | "baggage" | "b3" | "b3multi" | "jaeger" | "xray" | "ottrace" | "none",
+		] | *["tracecontext", "baggage"]
 
 		jaeger?: {
 			enabled?: bool | *false
@@ -284,13 +350,18 @@ import "strings"
 	#ui: {
 		enabled?:       bool | *true
 		default_theme?: "light" | "dark" | *"system"
+		topbar?: {
+			color?: string
+			label?: string
+		}
 	}
 
 	#audit: {
 		sinks?: {
 			log?: {
-				enabled?: bool | *false
-				file?:    string | *""
+				enabled?:  bool | *false
+				file?:     string | *""
+				encoding?: *"" | "json" | "console"
 			}
 			webhook?: {
 				enabled?:              bool | *false
@@ -303,6 +374,9 @@ import "strings"
 					headers?: [string]: string
 				}]
 			}
+			cloud?: {
+				enabled?: bool | *false
+			}
 		}
 		buffer?: {
 			capacity?:     int | *2
@@ -311,7 +385,27 @@ import "strings"
 		events?: [...string] | *["*:*"]
 	}
 
-	#experimental: {}
+	#analytics: {
+		storage?: {
+			clickhouse?: {
+				enabled?: bool | *false
+				url?:     string | *""
+			}
+		}
+		buffer?: {
+			capacity?:     int
+			flush_period?: string | *"2m"
+		}
+	}
+
+	#experimental: {
+		authorization?: {
+			enabled?: bool | *false
+		}
+		cloud?: {
+			enabled?: bool | *false
+		}
+	}
 
 	#duration: "^([0-9]+(ns|us|µs|ms|s|m|h))+$"
 }
