@@ -39,7 +39,17 @@ import (
 							name:  "FLIPT_META_STATE_DIRECTORY"
 							value: "/hom/flipt/.config/flipt"
 						},
-						for k, v in #config.env {name: k, value: v},
+						[
+							for k, v in #config.env {
+								name: k
+								if v.valueFrom != _|_ {
+									valueFrom: v.valueFrom
+								}
+								if v.valueFrom == _|_ {
+									value: v
+								}
+							},
+						],
 					]
 					volumeMounts: [{
 						mountPath: "/home/flipt/config/default.yml"
