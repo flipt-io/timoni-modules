@@ -9,8 +9,8 @@ package main
 values: {
 	image: {
 		repository: "docker.flipt.io/flipt/flipt"
-		digest:     "sha256:257ca92331a828be1df8c231cdb181dbe68ab43444d7c1563594981c573fb2cb"
-		tag:        "v1.36.0"
+		digest:     "sha256:1df56c5f1ecd21f21fda7970d85352177f1b2a87b3f8889a0086f5f37642b560"
+		tag:        "v1.44.0"
 	}
 	test: image: {
 		repository: "busybox"
