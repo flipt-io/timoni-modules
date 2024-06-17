@@ -3,6 +3,7 @@ package templates
 import (
 	"encoding/yaml"
 	"uuid"
+	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	batchv1 "k8s.io/api/batch/v1"
@@ -10,19 +11,19 @@ import (
 )
 
 #MigrationJob: batchv1.#Job & {
-	#config:    #Config
+	#config: #Config
+	let _checksum = uuid.SHA1(uuid.ns.DNS, yaml.Marshal(#config))
 	apiVersion: "batch/v1"
 	kind:       "Job"
 	metadata: timoniv1.#MetaComponent & {
 		#Meta:      #config.metadata
-		#Component: "migration"
+		#Component: "\(strings.SliceRunes(_checksum, 0, 30))"
 	}
 	metadata: annotations: timoniv1.Action.Force
 	spec: batchv1.#JobSpec & {
 		activeDeadlineSeconds: #config.migration.deadline
 		backoffLimit:          0
 		template: corev1.#PodTemplateSpec & {
-			let _checksum = uuid.SHA1(uuid.ns.DNS, yaml.Marshal(#config))
 			metadata: annotations: "timoni.sh/checksum": "\(_checksum)"
 			spec: {
 				containers: [{
