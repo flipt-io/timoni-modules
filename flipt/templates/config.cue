@@ -124,12 +124,7 @@ import (
 		size: *"5Gi" | string
 	}
 
-	env: [string]: (string | {
-		valueFrom: secretKeyRef: {
-			name: string
-			key:  string
-		}
-	})
+	env: [...corev1.#EnvVar]
 
 	autoscaling?: {
 		minReplicas: *1 | uint

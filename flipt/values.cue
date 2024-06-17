@@ -17,4 +17,14 @@ values: {
 		digest:     ""
 		tag:        "latest"
 	}
+	env: [
+		{name: "DBUSER", value: "george"},
+		{
+			name: "DBPASSWORD"
+			valueFrom: secretKeyRef: {
+				name: "foo"
+				key:  "DBPASSWORD"
+			}
+		},
+	]
 }

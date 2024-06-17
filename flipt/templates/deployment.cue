@@ -52,17 +52,7 @@ import (
 								name:  "SSH_KNOWN_HOSTS"
 								value: "/etc/flipt/known_hosts"
 							},
-						] + [
-							for k, v in #config.env {
-								name: k
-								if v.valueFrom != _|_ {
-									valueFrom: v.valueFrom
-								}
-								if v.valueFrom == _|_ {
-									value: v
-								}
-							},
-						]
+						] + #config.env
 						livenessProbe: {
 							httpGet: {
 								path: "/health"
