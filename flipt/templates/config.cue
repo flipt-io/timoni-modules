@@ -114,12 +114,6 @@ import (
 			http_port:  8080
 			grpc_port:  9000
 		}
-		db: {
-			url:               "file:/var/opt/flipt/flipt.db"
-			max_idle_conn:     2
-			max_open_conn:     0
-			conn_max_lifetime: 0
-		}
 	} & fliptv1.#FliptSpec) | fliptv1.#FliptSpec)
 
 	persistence?: {
@@ -130,7 +124,12 @@ import (
 		size: *"5Gi" | string
 	}
 
-	env: [string]: string
+	env: [string]: (string | {
+		valueFrom: secretKeyRef: {
+			name: string
+			key:  string
+		}
+	})
 
 	autoscaling?: {
 		minReplicas: *1 | uint

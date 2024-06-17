@@ -53,7 +53,15 @@ import (
 								value: "/etc/flipt/known_hosts"
 							},
 						] + [
-							for k, v in #config.env {name: k, value: v},
+							for k, v in #config.env {
+								name: k
+								if v.valueFrom != _|_ {
+									valueFrom: v.valueFrom
+								}
+								if v.valueFrom == _|_ {
+									value: v
+								}
+							},
 						]
 						livenessProbe: {
 							httpGet: {

@@ -7,7 +7,6 @@ import "strings"
 	//
 	// Flipt config file is a YAML file defining how to configure the
 	// Flipt application.
-	@jsonschema(schema="http://json-schema.org/draft/2019-09/schema#")
 	version?:        "1.0" | *"1.0"
 	experimental?:   #experimental
 	analytics:       #analytics
@@ -258,21 +257,23 @@ import "strings"
 		}
 	}
 
-	#db: {
+	#dbcommon: {
 		password?:                    string
 		max_idle_conn?:               int | *2
 		max_open_conn?:               int
 		conn_max_lifetime?:           =~#duration | int
 		prepared_statements_enabled?: bool | *true
-	} & ({
+	}
+
+	#db: *({
 		url?: string | *"file:/var/opt/flipt/flipt.db"
-	} | {
+	} & #dbcommon) | ({
 		protocol?: *"sqlite" | "cockroach" | "cockroachdb" | "file" | "mysql" | "postgres"
 		host?:     string
 		port?:     int
 		name?:     string
 		user?:     string
-	})
+	} & #dbcommon)
 
 	_#lower: ["debug", "error", "fatal", "info", "panic", "warn"]
 	_#all: _#lower + [for x in _#lower {strings.ToUpper(x)}]
