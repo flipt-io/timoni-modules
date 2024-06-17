@@ -12,6 +12,7 @@ import (
 
 #MigrationJob: batchv1.#Job & {
 	#config: #Config
+	#cmName: string
 	let _checksum = uuid.SHA1(uuid.ns.DNS, yaml.Marshal(#config))
 	apiVersion: "batch/v1"
 	kind:       "Job"
@@ -56,7 +57,7 @@ import (
 					},
 					{
 						name: "flipt-config"
-						configMap: name: #config.metadata.name
+						configMap: name: #cmName
 					},
 				]
 				restartPolicy: "Never"
