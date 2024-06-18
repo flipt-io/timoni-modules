@@ -43,7 +43,7 @@ import (
 						},
 					] + #config.env
 					volumeMounts: [{
-						mountPath: "/home/flipt/config/default.yml"
+						mountPath: "/etc/flipt/config/default.yml"
 						name:      "flipt-config"
 						readOnly:  true
 						subPath:   "default.yml"
