@@ -10,7 +10,7 @@ values: {
 	image: {
 		repository: "ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator"
 		digest:     ""
-		tag:        "v0.99.0"
+		tag:        "v0.108.0"
 	}
 	kubeRBACProxy: image: {
 		repository: "gcr.io/kubebuilder/kube-rbac-proxy"
