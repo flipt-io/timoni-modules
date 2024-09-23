@@ -9,7 +9,7 @@ package main
 values: {
 	manager: image: {
 		repository: "infisical/kubernetes-operator"
-		digest:     "sha256:94459f1ca9345e70440ce3272ad07432ff83f0d0bef5f77131b11677c27d0127"
+		digest:     "sha256:139e2b38c0212f94b2901df6b30a172096e0495080cd46bd0663c43f7a789d35"
 		tag:        "v0.7.1"
 	}
 	kubeRBACProxy: image: {
